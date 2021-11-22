@@ -5,6 +5,7 @@ from sqlalchemy.sql import base
 from sqlalchemy.sql.expression import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from tournament.model import *
 import pytz
 import requests
 
@@ -12,14 +13,14 @@ app = Flask(__name__)
 
 connect_to_db(app)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # enables Flask sessions
 app.secret_key = 'kdjfj#WK$JLKF8dsfslkdjf3fsnajcb%^#4w87SehR&Y#&RIRHbuSeufu9&Y&O#TR'
 api_token = ""
 app.jinja_env.undefined = StrictUndefined
-app.add_url_rule(
-    "/download_resume/<filename>", endpoint="download_file", build_only=True
-)
+# app.add_url_rule(
+#     "/endpoint", endpoint="download_file", build_only=True
+# )
 
 
 
@@ -82,3 +83,13 @@ def create_tournament():
 @app.route('/view_analytics')
 def view_analytics():
     return render_template('analytics.html')
+
+
+if __name__ == "__main__":
+    app.debug = True
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+    # app.jinja_env.auto_reload = app.debug
+    
+    # DebugToolbarExtension(app)
+
+    app.run(port=5000, host='0.0.0.0')
