@@ -30,11 +30,12 @@ def homepage():
 #_________________________
 @app.route('/myprofile')
 def logged_in_player_profile():
-    return render_template('profile.html')
+    return render_template('myprofile.html')
 
 @app.route('/profile/<username>')
 def player_profile(username):
-    return render_template('profile.html',user_id=user_id)
+    user = Player.query.first(id = session['logged_in_user_id'])
+    return render_template('player_profile.html',user_id=user.id)
 
 @app.route('/editprofile')
 def edit_profile():
@@ -47,9 +48,37 @@ def edit_profile():
 def tournament_listing():
     return render_template('tournament_listing.html')
 
+@app.route('/tournaments/<tournament_id>')
+def tournament(tournament_id):
+    return render_template('tournament_page.html')
+
+@app.route('tournaments/<tournament_id>/sign_up')
+def tournament_sign_up(tournament_id):
+    return render_template('tournament_sign_up.html',tournament_id=tournament_id)
+
 #routes to sign-ups/payment/payout.
 #__________________________________
 
 @app.route('/sign-up')
 def sign_up():
     return render_template('sign_up.html')
+
+@app.route('/login_page')
+def login_page():
+    return render_template('login_page.html')
+
+@app.route('/login')
+def login():
+    flash("Login successful.")
+    return redirect('/myprofile')
+
+#admin routes, must be logged into administrator account to access.
+#__________________________________________________________________
+
+@app.route('/create_tournament')
+def create_tournament():
+    return render_template('create_tournament.html')
+
+@app.route('/view_analytics')
+def view_analytics():
+    return render_template('analytics.html')
