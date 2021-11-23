@@ -17,6 +17,7 @@ class Player(db.Model):
     last_name = db.Column(db.String(48), nullable=True)
     activision_id = db.Column(db.String(64), nullable=False)
     location = db.Column(db.String(128), nullable=True)
+    last_30_day_kd = db.Column(db.Float)
     date_created = db.Column(db.DateTime)
 
 
@@ -33,7 +34,7 @@ class Duos(db.Model):
     player2_id = db.Column(db.Integer, db.ForeignKey('players.id'))
     team_kd = db.Column(db.Float)
 
-    players = db.relationship("Player", backref=db.backref(order_by=id))
+    players = db.relationship("Player", backref=db.backref('duos', order_by=id))
 
 
 class Trios(db.Model):
@@ -47,7 +48,7 @@ class Trios(db.Model):
     player3_id = db.Column(db.Integer, db.ForeignKey('players.id'))
     team_kd = db.Column(db.Float)
 
-    players = db.relationship("Player", backref=db.backref(order_by=id))
+    players = db.relationship("Player", backref=db.backref('trios', order_by=id))
 
 class Quads(db.Model):
 
@@ -61,7 +62,7 @@ class Quads(db.Model):
     player4_id = db.Column(db.Integer, db.ForeignKey('players.id'))
     team_kd = db.Column(db.Float)
 
-    players = db.relationship("Player", backref=db.backref(order_by=id))
+    players = db.relationship("Player", backref=db.backref("quads", order_by=id))
 
 class Tournament(db.Model):
 
@@ -82,15 +83,3 @@ def connect_to_db(app):
     #     uri = uri.replace("postgres://", "postgresql://")
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///Warzone'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-if __name__ == "__main__":
-    from app import app
-    connect_to_db(app)
-    print("connected to the database")
-    create = input("Create all tables? y/n")
-    seed = input("Seed tables? y/n")
-    if create.lower() == 'y':
-        db.create_all()
-    if seed.lower == 'y':
-        # seed the tables with a dummy row.
-        pass

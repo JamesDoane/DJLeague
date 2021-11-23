@@ -53,7 +53,7 @@ def tournament_listing():
 def tournament(tournament_id):
     return render_template('tournament_page.html')
 
-@app.route('tournaments/<tournament_id>/sign_up')
+@app.route('/tournaments/<tournament_id>/sign_up')
 def tournament_sign_up(tournament_id):
     return render_template('tournament_sign_up.html',tournament_id=tournament_id)
 
